@@ -1,0 +1,82 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="CodeCampWP7.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800" 
+    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+
+        <controls:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
+            <controls:PanoramaItem>
+                <ScrollViewer Margin="0,-38,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding EventModel.Title}" Style="{StaticResource PhoneTextTitle1Style}" TextWrapping="Wrap" Margin="10,0"/>
+                        <TextBlock Text="{Binding EventModel.Description}" TextWrapping="Wrap" Margin="10,0"/>
+                        <HyperlinkButton Content="More" NavigateUri="http://codecamp.ro/" TargetName="_blank" Margin="10,0" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:PanoramaItem>
+
+            <controls:PanoramaItem>
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}"  Style="{StaticResource PhoneTextTitle1Style}" />
+                        <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Name="Speaker" Orientation="Horizontal" Margin="0,0,0,17" Tap="Speaker_Tap_1">
+                                        <Image Source="{Binding PortraitImageUrl}" Width="99" Height="99"/>
+                                        <StackPanel Width="311">
+                                            <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextAccentStyle}" />
+                                            <TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:PanoramaItem>
+            <controls:PanoramaItem>
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=LocalizedResources.Sessions, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle1Style}"/>
+                        <ListBox ItemsSource="{Binding EventModel.TimeSlots}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding StartTime}"/>
+                                        <Line X1="0" X2="800" Stroke="{StaticResource PhoneAccentBrush}" StrokeThickness="2"/>
+                                        <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Name="Session" Tap="Session_Tap_1" Margin="0,0,0,20">
+                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                                        <TextBlock Text="{Binding Speakers}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                                        <TextBlock Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:PanoramaItem>
+        </controls:Panorama>
+    </Grid>
+</phone:PhoneApplicationPage>
