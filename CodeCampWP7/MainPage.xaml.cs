@@ -35,14 +35,14 @@ namespace CodeCampWP7
             }
         }
 
-        private void Speaker_Tap_1(object sender, GestureEventArgs e)
+        private void Speaker_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
             StackPanel speaker = (StackPanel)sender;
             App.ViewModel.SpeakerModel = (Speaker)speaker.DataContext;
             NavigationService.Navigate(new Uri("/SpeakerPage.xaml", UriKind.Relative));
         }
 
-        private void Session_Tap_1(object sender, GestureEventArgs e)
+        private void Session_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
             StackPanel session = (StackPanel)sender;
             App.ViewModel.SessionModel = (Session)session.DataContext;

@@ -22,7 +22,7 @@ namespace CodeCampWP7
             InitializeComponent();
         }
 
-        private void Speaker_Tap_1(object sender, GestureEventArgs e)
+        private void Speaker_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
             StackPanel speaker = (StackPanel)sender;
             App.ViewModel.SpeakerModel = (Speaker)speaker.DataContext;
