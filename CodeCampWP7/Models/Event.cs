@@ -17,14 +17,16 @@ namespace CodeCamp.Models
         public String Title { get; set; }
 
         public Location Location { get; set; }
-        public List<Speaker> Speakers { get; set; }
-        public List<Session> Sessions { get; set; }
+        public Speaker[] Speakers { get; set; }
+        public Session[] Sessions { get; set; }
         public List<Track> Tracks { get; set; }
-        public List<TimeSlot> TimeSlots { get; set; }
+        public TimeSlot[] TimeSlots { get; set; }
 
         public static Event Parse(string jsonContent)
         {
             Event newEvent = JsonConvert.DeserializeObject<Event>(jsonContent);
+            //newEvent.Speakers = newEvent.Speakers.Take(5).ToArray();
+            //newEvent.Sessions = newEvent.Sessions.Take(5).ToArray();
             foreach (Session session in newEvent.Sessions)
             {
                 session.SpeakerList = (from x in newEvent.Speakers where session.SpeakerRefIds.Contains(x.Id) select x).ToList();
@@ -42,7 +44,7 @@ namespace CodeCamp.Models
             newEvent.TimeSlots = (from x in newEvent.Sessions
                                   group x by x.Start into g
                                   orderby g.Key
-                                  select new TimeSlot() { Start = g.Key, Sessions = g.ToList() }).ToList();
+                                  select new TimeSlot() { Start = g.Key, Sessions = g.ToList() }).ToArray();
             var test=(from x in newEvent.Sessions
                                   group x by x.Start into g
                                   orderby g.Key

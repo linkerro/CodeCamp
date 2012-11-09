@@ -68,6 +68,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <TextBlock Name="Description" Text="{Binding Description}" Margin="9,10,0,0" TextWrapping="Wrap"/>
+            <Button Name="FeedbackButton" Content="{Binding Path=LocalizedResources.Feedback, Source={StaticResource LocalizedStrings}}" Margin="20"></Button>
         </StackPanel>
     </Grid>
 

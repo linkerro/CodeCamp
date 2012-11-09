@@ -36,8 +36,7 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
     <Grid x:Name="LayoutRoot" Background="Transparent">
-
-        <controls:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
+            <controls:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
             <controls:PanoramaItem>
                 <ScrollViewer Margin="0,-38,0,0">
                     <StackPanel>
@@ -52,10 +51,11 @@
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="{Binding Path=LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}"  Style="{StaticResource PhoneTextTitle1Style}" />
-                        <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" ScrollViewer.VerticalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel>
+                                        
                                     </VirtualizingStackPanel>
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
@@ -63,7 +63,7 @@
                                 <DataTemplate>
                                     <StackPanel Name="Speaker" Orientation="Horizontal" Margin="0,0,0,17" Tap="Speaker_Tap_1">
                                         <Image Source="{Binding PortraitImageUrl}" Width="99" Height="99"/>
-                                        <StackPanel Width="311">
+                                        <StackPanel >
                                             <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
                                             <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextAccentStyle}" />
                                             <TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
@@ -80,17 +80,11 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Path=LocalizedResources.Sessions, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle1Style}"/>
                         <ListBox ItemsSource="{Binding EventModel.TimeSlots}" ScrollViewer.VerticalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel>
-                                    </VirtualizingStackPanel>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock Text="{Binding StartTime}"/>
-                                        <Line X1="0" X2="800" Stroke="{StaticResource PhoneAccentBrush}" StrokeThickness="2"/>
+                                        <Line X1="0" X2="200" Stroke="{StaticResource PhoneAccentBrush}" StrokeThickness="2"/>
                                         <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>

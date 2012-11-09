@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using CodeCamp.Models;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 
 namespace CodeCampWP7
 {
@@ -24,6 +25,34 @@ namespace CodeCampWP7
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+            App.ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsUpdateLoaded":
+                    if (!App.ViewModel.IsUpdateLoaded)
+                    {
+                        ProgressIndicator progressIndicator = new ProgressIndicator()
+                        {
+                            IsVisible = true,
+                            IsIndeterminate = true,
+                            Text = "Loading"
+                        };
+                        SystemTray.SetProgressIndicator(this, progressIndicator);
+                    }
+                    else
+                    {
+                        ProgressIndicator progressIndicator = new ProgressIndicator()
+                        {
+                            IsVisible = false,
+                        };
+                        SystemTray.SetProgressIndicator(this, progressIndicator);
+                    }
+                    break;
+            }
         }
 
         // Load data for the ViewModel Items

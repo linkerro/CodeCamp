@@ -61,11 +61,20 @@ namespace CodeCampWP7.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to codecamp.
+        ///   Looks up a localized string similar to CODECAMP.
         /// </summary>
         public static string ApplicationTitle {
             get {
                 return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feedback.
+        /// </summary>
+        public static string Feedback {
+            get {
+                return ResourceManager.GetString("Feedback", resourceCulture);
             }
         }
         
