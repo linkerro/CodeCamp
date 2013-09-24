@@ -64,12 +64,12 @@ namespace CodeCampWP7
         /// </summary>
         private void TryGetEvent()
         {
+            NotifyPropertyChanged("IsUpdateLoaded");
             string eventJson = LoadFromStorage("lastEvent.js");
             if (!string.IsNullOrEmpty(eventJson))
             {
                 EventModel = Event.Parse(eventJson);
                 IsDataLoaded = true;
-                NotifyPropertyChanged("IsUpdateLoaded");
             }
             WebClient client = new WebClient();
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RequestCompleted);

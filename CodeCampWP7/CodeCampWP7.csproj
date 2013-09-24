@@ -139,6 +139,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeCampWP7_2013_09_23_20_56_13.sap" />
+    <None Include="CodeCampWP7_2013_09_24_21_46_05.sap" />
+    <None Include="CodeCampWP7_2013_09_24_22_24_53.sap" />
+    <None Include="CodeCampWP7_2013_09_24_22_35_49.sap" />
+    <None Include="CodeCampWP7_2013_09_24_22_37_00.sap" />
+    <None Include="CodeCampWP7_2013_09_24_22_40_48.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />

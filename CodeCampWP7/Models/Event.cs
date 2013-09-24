@@ -25,11 +25,16 @@ namespace CodeCamp.Models
         public static Event Parse(string jsonContent)
         {
             Event newEvent = JsonConvert.DeserializeObject<Event>(jsonContent);
-            //newEvent.Speakers = newEvent.Speakers.Take(5).ToArray();
-            //newEvent.Sessions = newEvent.Sessions.Take(5).ToArray();
+
+            foreach (var speaker in newEvent.Speakers)
+            {
+                speaker.Bio = speaker.Bio.Replace(@"\'", "'").Replace("<br/>", "\n").Replace(@"\n", "\n");
+            }
+
             foreach (Session session in newEvent.Sessions)
             {
                 session.SpeakerList = (from x in newEvent.Speakers where session.SpeakerRefIds.Contains(x.Id) select x).ToList();
+                session.Description = session.Description.Replace(@"\'", "'").Replace("<br/>", "\n").Replace(@"\n", "\n");
             }
 
             foreach (Track track in newEvent.Tracks)

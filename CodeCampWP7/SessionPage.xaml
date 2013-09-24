@@ -12,7 +12,7 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="False">
+    shell:SystemTray.IsVisible="True">
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
@@ -43,32 +43,34 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="{Binding Title}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <!--<TextBlock x:Name="ApplicationTitle" Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>-->
+            <TextBlock x:Name="PageTitle" Text="{Binding Title}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap"/>
             <TextBlock x:Name="Track" Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <StackPanel Grid.Row="1">
-            <ListBox Name="Speakers" Margin="0,0,-12,0" ItemsSource="{Binding SpeakerList}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Name="Speaker" Orientation="Horizontal" Margin="0,0,0,17" Tap="Speaker_Tap_1">
-                            <Image Source="{Binding PortraitImageUrl}" Width="99" Height="99"/>
-                            <StackPanel Width="311">
-                                <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="10,0"
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <ListBox Name="Speakers" Margin="25,0,-12,0" ItemsSource="{Binding SpeakerList}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Name="Speaker" Orientation="Horizontal" Margin="0,0,0,17" Tap="Speaker_Tap_1">
+                                <Image Source="{Binding PortraitImageUrl}" Width="99" Height="99"/>
+                                <StackPanel Width="311">
+                                    <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="10,0"
                                            Style="{StaticResource PhoneTextExtraLargeStyle}" />
-                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10,-2,10,0"
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10,-2,10,0"
                                            Style="{StaticResource PhoneTextAccentStyle}" />
-                                <TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0"
+                                    <TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0"
                                            Style="{StaticResource PhoneTextSubtleStyle}" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <TextBlock Name="Description" Text="{Binding Description}" Margin="9,10,0,0" TextWrapping="Wrap"/>
-        </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Name="Description" Text="{Binding Description}" Margin="25,10,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 
 </phone:PhoneApplicationPage>

@@ -13,7 +13,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False"
+    shell:SystemTray.IsVisible="true"
     toolkit:TiltEffect.IsTiltEnabled="True">
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
@@ -36,6 +36,19 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
+    <phone:PhoneApplicationPage.Resources>
+        <Storyboard x:Name="fadeIn">
+            <DoubleAnimation Storyboard.TargetName="img"
+                         Storyboard.TargetProperty="Opacity" From="0.0"
+                         To="1.0" Duration="0:0:1" />
+        </Storyboard>
+        <Storyboard x:Name="fadeOut">
+            <DoubleAnimation Storyboard.TargetName="img"
+                         Storyboard.TargetProperty="Opacity" From="1.0"
+                         To="0.0" Duration="0:0:1" />
+        </Storyboard>
+    </phone:PhoneApplicationPage.Resources>
+
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
         <controls:Pivot Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" x:Name="MainPivot"
@@ -50,52 +63,43 @@
                 </ScrollViewer>
             </controls:PivotItem>
             <controls:PivotItem Header="{Binding Path=LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer>
-                    <StackPanel>
-                        <!--<TextBlock Text="{Binding Path=LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}"  Style="{StaticResource PhoneTextTitle1Style}" />-->
-                        <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" ScrollViewer.VerticalScrollBarVisibility="Disabled" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Name="Speaker" Orientation="Horizontal" Margin="15,15,0,17" Tap="Speaker_Tap_1">
-                                        <Image Source="{Binding PortraitImageUrl}" Width="64" Height="64"/>
-                                        <StackPanel >
-                                            <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="15,-5,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
-                                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="15,-5,10,0" Style="{StaticResource PhoneTextAccentStyle}" />
-                                            <!--<TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />-->
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>
-                </ScrollViewer>
+                <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Name="Speaker" Orientation="Horizontal" Margin="15,15,0,17" Tap="Speaker_Tap_1">
+                                <Image Source="{Binding PortraitImageUrl}" Width="64" Height="64"/>
+                                <StackPanel >
+                                    <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="15,-5,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="15,-5,10,0" Style="{StaticResource PhoneTextAccentStyle}" />
+                                    <TextBlock Text="{Binding Company}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </controls:PivotItem>
             <controls:PivotItem Header="{Binding Path=LocalizedResources.Sessions, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer>
-                    <StackPanel>
-                        <ListBox ItemsSource="{Binding EventModel.TimeSlots}" ScrollViewer.VerticalScrollBarVisibility="Disabled" VirtualizingStackPanel.VirtualizationMode="Recycling" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding StartTime}"/>
-                                        <Line X1="0" X2="200" Stroke="{StaticResource PhoneAccentBrush}" StrokeThickness="2"/>
-                                        <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Name="Session" Tap="Session_Tap_1" Margin="0,0,0,20">
-                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                                        <TextBlock Text="{Binding Speakers}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                                        <TextBlock Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>
-                </ScrollViewer>
+                <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.TimeSlots}" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding StartTime}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+                                <Line X1="0" X2="200" Stroke="{StaticResource PhoneAccentBrush}" StrokeThickness="2" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+                                <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Name="Session" Tap="Session_Tap_1" Margin="0,0,0,20">
+                                                <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                                <TextBlock Text="{Binding Speakers}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                                <TextBlock Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </controls:PivotItem>
         </controls:Pivot>
     </Grid>
