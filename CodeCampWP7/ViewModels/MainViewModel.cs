@@ -69,12 +69,14 @@ namespace CodeCampWP7
             {
                 EventModel = Event.Parse(eventJson);
                 IsDataLoaded = true;
+                NotifyPropertyChanged("IsUpdateLoaded");
             }
             WebClient client = new WebClient();
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RequestCompleted);
-            client.DownloadStringAsync(new Uri("http://tagonsoft.ro/codecamp.php"));
+            //client.DownloadStringAsync(new Uri("http://tagonsoft.ro/codecamp.php"));
+            client.Headers["X-ZUMO-APPLICATION"] = "rvFDWxpvbJyobzmGuNFmUghdIxSqwQ70";
+            client.DownloadStringAsync(new Uri("https://codecampevents.azure-mobile.net/tables/event"));
             IsUpdateLoaded = false;
-            NotifyPropertyChanged("IsUpdateLoaded");
         }
 
         private void RequestCompleted(object sender, DownloadStringCompletedEventArgs eventArgs)

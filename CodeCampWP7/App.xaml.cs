@@ -72,7 +72,7 @@ namespace CodeCampWP7
                 // application's PhoneApplicationService object to Disabled.
                 // Caution:- Use this under debug mode only. Application that disables user idle detection will continue to run
                 // and consume battery power when the user is not using the phone.
-                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+                //PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
         }

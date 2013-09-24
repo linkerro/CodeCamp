@@ -15,10 +15,10 @@ using Microsoft.Phone.Shell;
 
 namespace CodeCampWP7
 {
-    public partial class MainPage : PhoneApplicationPage
+    public partial class MainPagePanorama : PhoneApplicationPage
     {
         // Constructor
-        public MainPage()
+        public MainPagePanorama()
         {
             InitializeComponent();
 
