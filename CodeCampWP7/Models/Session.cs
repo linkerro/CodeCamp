@@ -19,6 +19,7 @@ namespace CodeCamp.Models
         public int? TrackRefId { get; set; }
         public List<Speaker> SpeakerList { get; set; }
         public Track Track { get; set; }
+        public string StartTime { get { return Start.ToShortTimeString(); } }
         public string Speakers
         {
             get

@@ -163,5 +163,27 @@ namespace CodeCampWP7
         }
 
         #endregion
+
+        public static void AddWatermark(TextBox textBox, string watermark)
+        {
+            if (textBox.Text == String.Empty)
+            {
+                textBox.Text = watermark;
+                SolidColorBrush Brush2 = new SolidColorBrush();
+                Brush2.Color = Colors.Gray;
+                textBox.Foreground = Brush2;
+            }
+        }
+        public static void RemoveWatermark(TextBox textBox, string watermark)
+        {
+            if (textBox.Text == watermark)
+            {
+                textBox.Text = string.Empty;
+                SolidColorBrush Brush1 = new SolidColorBrush();
+                Brush1.Color = Colors.Black;
+                textBox.Foreground = Brush1;
+            }
+        }
+
     }
 }

@@ -45,19 +45,15 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <!--<TextBlock x:Name="ApplicationTitle" Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
-                       Style="{StaticResource PhoneTextNormalStyle}"/>-->
-            <TextBlock x:Name="SpeakerName" Text="{Binding FullName}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"
-                       toolkit:TurnstileFeatherEffect.FeatheringIndex="0"/>
+            <TextBlock x:Name="SpeakerName" Text="{Binding FullName}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
             <StackPanel Orientation="Horizontal" Margin="9,0,0,0">
                 <Image Source="{Binding PortraitImageUrl}" Width="200" Height="200" Margin="0,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
                 <StackPanel>
                     <TextBlock x:Name="SpeakerTitle" Text="{Binding Title}" Style="{StaticResource PhoneTextAccentStyle}" toolkit:TurnstileFeatherEffect.FeatheringIndex="0"/>
-                    <HyperlinkButton x:Name="CompanyPage"  NavigateUri="{Binding CompanyUrl}" TargetName="_blank" Style="{StaticResource HyperlinkButtonStyle1}"
-                                     toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                    <HyperlinkButton x:Name="CompanyPage" NavigateUri="{Binding CompanyUrl}" TargetName="_blank" Style="{StaticResource HyperlinkButtonStyle1}" HorizontalAlignment="Left">
                         <HyperlinkButton.Content>
-                            <StackPanel Margin="0,0">
-                                <TextBlock x:Name="CompanyName" Text="{Binding Company}" TextDecorations="Underline"/>
+                            <StackPanel>
+                                <TextBlock x:Name="CompanyName" Text="{Binding CompanyName}" TextDecorations="Underline"/>
                             </StackPanel>
                         </HyperlinkButton.Content>
                     </HyperlinkButton>
@@ -67,7 +63,18 @@
         <Grid x:Name="Body" Background="Transparent" Grid.Row="1" Margin="10,0">
             <ScrollViewer Margin="0,0">
                 <StackPanel Margin="0,0">
-                    <TextBlock Name="SpeakerBio" Text="{Binding Bio}" Margin="9,10,0,0" TextWrapping="Wrap" toolkit:TurnstileFeatherEffect.FeatheringIndex="3"/>
+                    <TextBlock Name="SpeakerBio" Text="{Binding Bio}" Margin="9,10,0,0" TextWrapping="Wrap"/>
+                    <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Name="Session" Margin="0,0,0,20" Tap="Session_Tap_1">
+                                    <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding StartTime}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

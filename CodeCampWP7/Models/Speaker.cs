@@ -9,7 +9,7 @@ namespace CodeCamp.Models
     {
         public string Bio { get; set; }
         public string BlogUrl { get; set; }
-        public string Company { get; set; }
+        public string CompanyName { get; set; }
         public string CompanyUrl { get; set; }
         public string FacebookProfileUrl { get; set; }
         public string FirstName { get; set; }
@@ -20,5 +20,6 @@ namespace CodeCamp.Models
         public string PortraitImageUrl { get; set; }
         public string Title { get; set; }
         public string TwitterProfileUrl { get; set; }
+        public IEnumerable<Session> Sessions { get; set; }
     }
 }

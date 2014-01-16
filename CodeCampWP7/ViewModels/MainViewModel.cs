@@ -93,6 +93,8 @@ namespace CodeCampWP7
             NotifyPropertyChanged("IsUpdateLoaded");
         }
 
+        public bool IsLightTheme { get { return ((Visibility)App.Current.Resources["PhoneLightThemeVisibility"]) == Visibility.Visible; } }
+
 
         #region File interaction methods
         /// <summary>

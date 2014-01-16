@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using CodeCamp.Models;
 
 namespace CodeCampWP7
 {
@@ -19,6 +20,13 @@ namespace CodeCampWP7
         {
             DataContext = App.ViewModel.SpeakerModel;
             InitializeComponent();
+        }
+
+        private void Session_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            StackPanel session = (StackPanel)sender;
+            App.ViewModel.SessionModel = (Session)session.DataContext;
+            NavigationService.Navigate(new Uri("/SessionPage.xaml", UriKind.Relative));
         }
     }
 }

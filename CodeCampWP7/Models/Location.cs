@@ -9,8 +9,10 @@ namespace CodeCamp.Models
     public class Location
     {
         public string City { get; set; }
-        public GeoCoordinate Coordinates { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
+        public GeoCoordinate Coorinates { get { return new GeoCoordinate(Latitude, Longitude); } }
     }
 }

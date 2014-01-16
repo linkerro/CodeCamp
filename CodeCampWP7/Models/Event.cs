@@ -26,15 +26,17 @@ namespace CodeCamp.Models
         {
             Event newEvent = JsonConvert.DeserializeObject<Event>(jsonContent);
 
-            foreach (var speaker in newEvent.Speakers)
-            {
-                speaker.Bio = speaker.Bio.Replace(@"\'", "'").Replace("<br/>", "\n").Replace(@"\n", "\n");
-            }
 
             foreach (Session session in newEvent.Sessions)
             {
                 session.SpeakerList = (from x in newEvent.Speakers where session.SpeakerRefIds.Contains(x.Id) select x).ToList();
                 session.Description = session.Description.Replace(@"\'", "'").Replace("<br/>", "\n").Replace(@"\n", "\n");
+            }
+
+            foreach (var speaker in newEvent.Speakers)
+            {
+                speaker.Sessions = newEvent.Sessions.Where(s => s.SpeakerRefIds.Contains(speaker.Id));
+                speaker.Bio = speaker.Bio.Replace(@"\'", "'").Replace("<br/>", "\n").Replace(@"\n", "\n");
             }
 
             foreach (Track track in newEvent.Tracks)
@@ -50,10 +52,6 @@ namespace CodeCamp.Models
                                   group x by x.Start into g
                                   orderby g.Key
                                   select new TimeSlot() { Start = g.Key, Sessions = g.ToList() }).ToArray();
-            var test=(from x in newEvent.Sessions
-                                  group x by x.Start into g
-                                  orderby g.Key
-                                  select g);
             return newEvent;
         }
     }
