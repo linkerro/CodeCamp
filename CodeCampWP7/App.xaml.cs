@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
 namespace CodeCampWP7
 {
-    public partial class App : Application
+    public partial class App
     {
-        private static MainViewModel viewModel = null;
+        private static MainViewModel _viewModel;
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
@@ -28,10 +22,7 @@ namespace CodeCampWP7
             get
             {
                 // Delay creation of the view model until necessary
-                if (viewModel == null)
-                    viewModel = new MainViewModel();
-
-                return viewModel;
+                return _viewModel ?? (_viewModel = new MainViewModel(new Storage()));
             }
         }
 
@@ -56,10 +47,10 @@ namespace CodeCampWP7
             InitializePhoneApplication();
 
             // Show graphics profiling information while debugging.
-            if (System.Diagnostics.Debugger.IsAttached)
+            if (Debugger.IsAttached)
             {
                 // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+                Current.Host.Settings.EnableFrameRateCounter = true;
 
                 // Show the areas of the app that are being redrawn in each frame.
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
@@ -88,9 +79,9 @@ namespace CodeCampWP7
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // Ensure that application state is restored appropriately
-            if (!App.ViewModel.IsDataLoaded)
+            if (!ViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+                ViewModel.LoadData();
             }
         }
 
@@ -110,32 +101,32 @@ namespace CodeCampWP7
         // Code to execute if a navigation fails
         private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            if (System.Diagnostics.Debugger.IsAttached)
+            if (Debugger.IsAttached)
             {
                 // A navigation has failed; break into the debugger
-                System.Diagnostics.Debugger.Break();
+                Debugger.Break();
             }
         }
 
         // Code to execute on Unhandled Exceptions
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
-            if (System.Diagnostics.Debugger.IsAttached)
+            if (Debugger.IsAttached)
             {
                 // An unhandled exception has occurred; break into the debugger
-                System.Diagnostics.Debugger.Break();
+                Debugger.Break();
             }
         }
 
         #region Phone application initialization
 
         // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
+        private bool _phoneApplicationInitialized;
 
         // Do not add any additional code to this method
         private void InitializePhoneApplication()
         {
-            if (phoneApplicationInitialized)
+            if (_phoneApplicationInitialized)
                 return;
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
@@ -148,15 +139,14 @@ namespace CodeCampWP7
             RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
             // Ensure we don't initialize again
-            phoneApplicationInitialized = true;
+            _phoneApplicationInitialized = true;
         }
 
         // Do not add any additional code to this method
         private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
         {
             // Set the root visual to allow the application to render
-            if (RootVisual != RootFrame)
-                RootVisual = RootFrame;
+            RootVisual = RootFrame;
 
             // Remove this handler since it is no longer needed
             RootFrame.Navigated -= CompleteInitializePhoneApplication;
@@ -169,9 +159,8 @@ namespace CodeCampWP7
             if (textBox.Text == String.Empty)
             {
                 textBox.Text = watermark;
-                SolidColorBrush Brush2 = new SolidColorBrush();
-                Brush2.Color = Colors.Gray;
-                textBox.Foreground = Brush2;
+                var brush2 = new SolidColorBrush {Color = Colors.Gray};
+                textBox.Foreground = brush2;
             }
         }
         public static void RemoveWatermark(TextBox textBox, string watermark)
@@ -179,9 +168,8 @@ namespace CodeCampWP7
             if (textBox.Text == watermark)
             {
                 textBox.Text = string.Empty;
-                SolidColorBrush Brush1 = new SolidColorBrush();
-                Brush1.Color = Colors.Black;
-                textBox.Foreground = Brush1;
+                var brush1 = new SolidColorBrush {Color = Colors.Black};
+                textBox.Foreground = brush1;
             }
         }
 

@@ -1,5 +1,4 @@
-﻿<phone:PhoneApplicationPage 
-    x:Class="CodeCampWP7.MainPagePivot"
+﻿<phone:PhoneApplicationPage
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -9,13 +8,36 @@
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800" 
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
+    xmlns:Converters="clr-namespace:CodeCampWP7.Converters" 
+    x:Class="CodeCampWP7.MainPagePivot" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="true"
     toolkit:TiltEffect.IsTiltEnabled="True">
+
+    <phone:PhoneApplicationPage.Resources>
+        <Converters:LocationToGeoCoordinateConverter x:Key="LocationToGeoCoordinateConverter"/>
+        <Storyboard x:Name="fadeIn">
+            <DoubleAnimation Storyboard.TargetName="img"
+        		Storyboard.TargetProperty="Opacity" From="0.0"
+        		To="1.0" Duration="0:0:1" />
+        </Storyboard>
+        <Storyboard x:Name="fadeOut">
+            <DoubleAnimation Storyboard.TargetName="img"
+        		Storyboard.TargetProperty="Opacity" From="1.0"
+        		To="0.0" Duration="0:0:1" />
+        </Storyboard>
+    </phone:PhoneApplicationPage.Resources>
+
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush"/>
+    </phone:PhoneApplicationPage.Foreground>
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
@@ -37,41 +59,43 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
-    <phone:PhoneApplicationPage.Resources>
-        <Storyboard x:Name="fadeIn">
-            <DoubleAnimation Storyboard.TargetName="img"
-                         Storyboard.TargetProperty="Opacity" From="0.0"
-                         To="1.0" Duration="0:0:1" />
-        </Storyboard>
-        <Storyboard x:Name="fadeOut">
-            <DoubleAnimation Storyboard.TargetName="img"
-                         Storyboard.TargetProperty="Opacity" From="1.0"
-                         To="0.0" Duration="0:0:1" />
-        </Storyboard>
-    </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="False" IsVisible="False">
+            <shell:ApplicationBarIconButton Click="OnSpeakerSearch" IconUri="/Assets/AppBar/appbar.feature.search.rest.png" Text="search" IsEnabled="False"/>
+            <shell:ApplicationBarIconButton Click="OnSessionSearch" IconUri="/Assets/AppBar/appbar.feature.search.rest.png" Text="search" IsEnabled="False"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
-        <controls:Pivot Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" x:Name="MainPivot"
-                        toolkit:TurnstileFeatherEffect.FeatheringIndex="0" SelectionChanged="MainPivot_SelectionChanged">
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}">
+        <controls:Pivot Title="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" x:Name="MainPivot"
+			toolkit:TurnstileFeatherEffect.FeatheringIndex="0" SelectionChanged="MainPivot_SelectionChanged">
+            <controls:PivotItem Header="{Binding LocalizedResources.Description, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Margin="0,-25,0,0">
                     <StackPanel>
                         <TextBlock Text="{Binding EventModel.Title}" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,0"/>
                         <TextBlock Text="{Binding EventModel.Description}" TextWrapping="Wrap" Margin="10,0"/>
-                        <maps:Map Center="{Binding EventModel.Location.Coorinates}" ZoomLevel="16" Margin="10"
-                                  CredentialsProvider="AsvkJmAdv1z-IIAVGcz8cxN-fUcXMr6T8kQub_TeqjvQB0xXI32VcD2rnz1q_JFA">
-                            <maps:Pushpin Location="{Binding EventModel.Location.Coorinates}"></maps:Pushpin>
-                        </maps:Map>
                         <HyperlinkButton Content="More" NavigateUri="http://iasi.codecamp.ro/" TargetName="_blank" Margin="0,0" HorizontalAlignment="Left"/>
+                        <maps:Map x:Name="Map" Center="{Binding EventModel.Location, Converter={StaticResource LocationToGeoCoordinateConverter}}" ZoomLevel="16" Margin="10"
+							CredentialsProvider="AsvkJmAdv1z-IIAVGcz8cxN-fUcXMr6T8kQub_TeqjvQB0xXI32VcD2rnz1q_JFA">
+                            <maps:Pushpin Location="{Binding EventModel.Location, Converter={StaticResource LocationToGeoCoordinateConverter}}"/>
+                        </maps:Map>
+                        <StackPanel Orientation="Horizontal" Tap="Walking_Tap">
+                            <Image Source="/Assets/calendar.late.png"/>
+                            <TextBlock Text="walking directions" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,5"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tap="Driving_Tap">
+                            <Image Source="/Assets/car.png"/>
+                            <TextBlock Text="driving directions" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,5"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem Header="{Binding LocalizedResources.Speakers, Source={StaticResource LocalizedStrings}}">
                 <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.Speakers}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Name="Speaker" Orientation="Horizontal" Margin="5,1,0,17" Tap="Speaker_Tap_1">
+                            <StackPanel x:Name="Speaker" Orientation="Horizontal" Margin="5,1,0,17" Tap="Speaker_Tap">
                                 <Image Source="{Binding PortraitImageUrl}" Width="99" Height="99"/>
                                 <StackPanel >
                                     <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="15,-5,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
@@ -83,7 +107,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </controls:PivotItem>
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.Sessions, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem Header="{Binding LocalizedResources.Sessions, Source={StaticResource LocalizedStrings}}">
                 <ListBox Margin="0,0,-12,0" ItemsSource="{Binding EventModel.TimeSlots}" VirtualizingStackPanel.VirtualizationMode="Recycling">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -93,7 +117,7 @@
                                 <ListBox ItemsSource="{Binding Sessions}" ScrollViewer.VerticalScrollBarVisibility="Disabled" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Name="Session" Tap="Session_Tap_1" Margin="0,0,0,20">
+                                            <StackPanel x:Name="Session" Tap="Session_Tap" Margin="0,0,0,20">
                                                 <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                                                 <TextBlock Text="{Binding Speakers}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                                 <TextBlock Text="{Binding Track.Notes}" Style="{StaticResource PhoneTextAccentStyle}"/>
@@ -108,10 +132,4 @@
             </controls:PivotItem>
         </controls:Pivot>
     </Grid>
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="False" IsVisible="False">
-            <shell:ApplicationBarIconButton Click="OnSpeakerSearch" IconUri="/Assets/AppBar/appbar.feature.search.rest.png" Text="search" IsEnabled="False"/>
-            <shell:ApplicationBarIconButton Click="OnSessionSearch" IconUri="/Assets/AppBar/appbar.feature.search.rest.png" Text="search" IsEnabled="False"/>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

@@ -1,32 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
 using CodeCamp.Models;
-using System.IO.IsolatedStorage;
-using System.IO;
 using System.Net;
-using CodeCampWP7.Models;
+using Model;
 
 namespace CodeCampWP7
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel()
+        public MainViewModel(Storage storage)
         {
+            _storage=storage;
+            _downloader = new Downloader(this,_storage);
         }
 
         private Event _event;
+        private readonly Storage _storage;
+        private readonly Downloader _downloader;
+
         public Event EventModel
         {
             get
@@ -64,94 +56,38 @@ namespace CodeCampWP7
         /// </summary>
         private void TryGetEvent()
         {
-            NotifyPropertyChanged("IsUpdateLoaded");
-            string eventJson = LoadFromStorage("lastEvent.js");
-            if (!string.IsNullOrEmpty(eventJson))
-            {
-                EventModel = Event.Parse(eventJson);
-                IsDataLoaded = true;
-            }
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RequestCompleted);
-            //client.DownloadStringAsync(new Uri("http://tagonsoft.ro/codecamp.php"));
-            client.Headers["X-ZUMO-APPLICATION"] = "rvFDWxpvbJyobzmGuNFmUghdIxSqwQ70";
-            client.DownloadStringAsync(new Uri("https://codecampevents.azure-mobile.net/tables/event"));
             IsUpdateLoaded = false;
+            NotifyPropertyChanged("IsUpdateLoaded");
+            _downloader.MakeRequest(OnFailure, OnSuccess);
         }
 
-        private void RequestCompleted(object sender, DownloadStringCompletedEventArgs eventArgs)
+        public  void UpdateEvent(DownloadStringCompletedEventArgs eventArgs)
         {
-            if (eventArgs.Error != null)
-            {
-                MessageBox.Show(eventArgs.Error.Message);
-                return;
-            }
-            SaveToStorage("lastEvent.js", eventArgs.Result);
-            EventModel = Event.Parse(eventArgs.Result);
-            IsDataLoaded = true;
+            SetEvent(eventArgs.Result);
             IsUpdateLoaded = true;
             NotifyPropertyChanged("IsUpdateLoaded");
         }
 
-        public bool IsLightTheme { get { return ((Visibility)App.Current.Resources["PhoneLightThemeVisibility"]) == Visibility.Visible; } }
-
-
-        #region File interaction methods
-        /// <summary>
-        /// Save content to the given file name. If the file exists it is replaced by the new one, if it does not exist it is created.
-        /// </summary>
-        /// <param name="fileName">The name of the file to be created.</param>
-        /// <param name="content">The string content to be saved to disk.</param>
-        void SaveToStorage(string fileName, string content)
+        public void SetEvent(string eventJson)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                //if the file exists delete it, as we don't need the old version
-                if (store.FileExists(fileName))
-                    store.DeleteFile(fileName);
-
-                using (IsolatedStorageFileStream file = store.OpenFile(fileName, FileMode.Create, FileAccess.Write))
-                {
-                    using (var streamWriter = new StreamWriter(file))
-                    {
-                        streamWriter.Write(content);
-                        streamWriter.Flush();
-                    }
-                }
-
-            }
-
+            EventModel = Event.Parse(eventJson);
+            IsDataLoaded = true;
         }
 
-        /// <summary>
-        /// Load content form the given file.
-        /// </summary>
-        /// <param name="fileName">The name of the file that needs to be read.</param>
-        /// <returns>The content of the file as a string.</returns>
-        string LoadFromStorage(string fileName)
+        public void OnSuccess(DownloadStringCompletedEventArgs eventArgs)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (!store.FileExists(fileName))
-                    return null;
-
-                using (IsolatedStorageFileStream file = store.OpenFile(fileName, FileMode.Open, FileAccess.Read))
-                {
-                    using (var reader = new StreamReader(file))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-
-            }
+            UpdateEvent(eventArgs);
         }
 
-        #endregion
+        public void OnFailure()
+        {
+            MessageBox.Show("There was a problem contacting the server. Please try again later.");
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            var handler = PropertyChanged;
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));

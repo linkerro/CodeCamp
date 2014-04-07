@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
-using CodeCamp.Models;
+using Model;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace CodeCampWP7
 {
-    public partial class SpeakerPage : PhoneApplicationPage
+    public partial class SpeakerPage
     {
         public SpeakerPage()
         {
@@ -22,9 +13,9 @@ namespace CodeCampWP7
             InitializeComponent();
         }
 
-        private void Session_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Session_Tap_1(object sender, GestureEventArgs e)
         {
-            StackPanel session = (StackPanel)sender;
+            var session = (StackPanel)sender;
             App.ViewModel.SessionModel = (Session)session.DataContext;
             NavigationService.Navigate(new Uri("/SessionPage.xaml", UriKind.Relative));
         }

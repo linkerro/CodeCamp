@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using CodeCampWP7.ViewModels;
-using CodeCamp.Models;
-using System.Windows.Media;
+using Model;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace CodeCampWP7
 {
-    public partial class SessionSearch : PhoneApplicationPage
+    public partial class SessionSearch
     {
         public SessionSearch()
         {
-            DataContext = new SessionSearchViewModel() { Filter = string.Empty };
+            DataContext = new SessionSearchViewModel { Filter = string.Empty };
 
             InitializeComponent();
 
@@ -29,9 +22,9 @@ namespace CodeCampWP7
             ((SessionSearchViewModel)DataContext).Filter = ((TextBox)sender).Text == "search" ? string.Empty : ((TextBox)sender).Text;
         }
 
-        private void Session_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Session_Tap_1(object sender, GestureEventArgs e)
         {
-            StackPanel session = (StackPanel)sender;
+            var session = (StackPanel)sender;
             App.ViewModel.SessionModel = (Session)session.DataContext;
             NavigationService.Navigate(new Uri("/SessionPage.xaml", UriKind.Relative));
         }

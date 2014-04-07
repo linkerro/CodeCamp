@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using CodeCamp.Models;
 using CodeCampWP7.ViewModels;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace CodeCampWP7
 {
-    public partial class SpeakerSearch : PhoneApplicationPage
+    public partial class SpeakerSearch
     {
         public SpeakerSearch()
         {
-            DataContext = new SpeakerSearchViewModel() {
+            DataContext = new SpeakerSearchViewModel
+            {
                 Filter=string.Empty,
                 FilteredSpeakers = App.ViewModel.EventModel.Speakers
             };
@@ -24,9 +19,9 @@ namespace CodeCampWP7
             App.AddWatermark(txtSearch, "search");
         }
 
-        private void Speaker_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Speaker_Tap_1(object sender, GestureEventArgs e)
         {
-            StackPanel speaker = (StackPanel)sender;
+            var speaker = (StackPanel)sender;
             App.ViewModel.SpeakerModel = (Speaker)speaker.DataContext;
             NavigationService.Navigate(new Uri("/SpeakerPage.xaml", UriKind.Relative));
         }

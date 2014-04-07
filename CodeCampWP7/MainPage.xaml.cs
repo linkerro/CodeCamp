@@ -1,41 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using Windows.System;
 using CodeCamp.Models;
-using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Model;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace CodeCampWP7
 {
-    public partial class MainPagePivot : PhoneApplicationPage
+    public partial class MainPagePivot
     {
         // Constructor
         public MainPagePivot()
         {
             InitializeComponent();
 
-            // Set the data context of the listbox control to the sample data
+            // Set the data context of the main page to the application view-model
             DataContext = App.ViewModel;
-            this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+            Loaded += MainPage_Loaded;
             App.ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case "IsUpdateLoaded":
                     if (!App.ViewModel.IsUpdateLoaded)
                     {
-                        ProgressIndicator progressIndicator = new ProgressIndicator()
+                        var progressIndicator = new ProgressIndicator
                         {
                             IsVisible = true,
                             IsIndeterminate = true,
@@ -45,7 +41,7 @@ namespace CodeCampWP7
                     }
                     else
                     {
-                        ProgressIndicator progressIndicator = new ProgressIndicator()
+                        var progressIndicator = new ProgressIndicator
                         {
                             IsVisible = false,
                         };
@@ -64,16 +60,16 @@ namespace CodeCampWP7
             }
         }
 
-        private void Speaker_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Speaker_Tap(object sender, GestureEventArgs e)
         {
-            StackPanel speaker = (StackPanel)sender;
+            var speaker = (StackPanel)sender;
             App.ViewModel.SpeakerModel = (Speaker)speaker.DataContext;
             NavigationService.Navigate(new Uri("/SpeakerPage.xaml", UriKind.Relative));
         }
 
-        private void Session_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Session_Tap(object sender, GestureEventArgs e)
         {
-            StackPanel session = (StackPanel)sender;
+            var session = (StackPanel)sender;
             App.ViewModel.SessionModel = (Session)session.DataContext;
             NavigationService.Navigate(new Uri("/SessionPage.xaml", UriKind.Relative));
         }
@@ -87,7 +83,7 @@ namespace CodeCampWP7
             switch (pivotItem)
             {
                 case Sections.Speakers:
-                    button = new ApplicationBarIconButton()
+                    button = new ApplicationBarIconButton
                     {
                         IconUri = new Uri("/Assets/AppBar/appbar.feature.search.rest.png",UriKind.Relative),
                         Text = "Search"
@@ -96,7 +92,7 @@ namespace CodeCampWP7
                     ApplicationBar.Buttons.Add(button);
                     break;
                 case Sections.Sessions:
-                    button = new ApplicationBarIconButton()
+                    button = new ApplicationBarIconButton
                     {
                         IconUri = new Uri("/Assets/AppBar/appbar.feature.search.rest.png",UriKind.Relative),
                         Text = "Search"
@@ -106,20 +102,6 @@ namespace CodeCampWP7
                     break;
             }
             ApplicationBar.IsVisible = ApplicationBar.Buttons.Count > 0;
-        }
-
-        private ApplicationBarIconButton GetIconButton(AppBarButtons id)
-        {
-            return (ApplicationBarIconButton)ApplicationBar.Buttons[(int)id];
-        }
-
-        public enum Sections
-        {
-            Description,
-            Speakers,
-            Sessions,
-            Tracks,
-            Location
         }
 
         public enum AppBarButtons
@@ -136,6 +118,20 @@ namespace CodeCampWP7
         private void OnSessionSearch(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/SessionSearch.xaml", UriKind.Relative));            
+        }
+
+        private async void Walking_Tap(object sender, GestureEventArgs e)
+        {
+            var uri = new Uri("ms-walk-to:?destination.latitude=" + App.ViewModel.EventModel.Location.Latitude.ToString(CultureInfo.InvariantCulture) +
+                            "&destination.longitude=" + App.ViewModel.EventModel.Location.Longitude.ToString(CultureInfo.InvariantCulture) + "&destination.name=" + App.ViewModel.EventModel.Title);
+            await Launcher.LaunchUriAsync(uri);
+        }
+
+        private async void Driving_Tap(object sender, GestureEventArgs e)
+        {
+            var uri = new Uri("ms-drive-to:?destination.latitude=" + App.ViewModel.EventModel.Location.Latitude.ToString(CultureInfo.InvariantCulture) +
+                            "&destination.longitude=" + App.ViewModel.EventModel.Location.Longitude.ToString(CultureInfo.InvariantCulture) + "&destination.name=" + App.ViewModel.EventModel.Title);
+            await Launcher.LaunchUriAsync(uri);
         }
     }
 }
