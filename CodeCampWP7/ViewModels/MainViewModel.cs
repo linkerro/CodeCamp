@@ -33,9 +33,8 @@ namespace CodeCampWP7
         }
         public Speaker SpeakerModel { get; set; }
         public Session SessionModel { get; set; }
-        public FullFeedback FeedbackModel { get; set; }
 
-        public bool IsDataLoaded
+      public bool IsDataLoaded
         {
             get;
             private set;
@@ -81,7 +80,7 @@ namespace CodeCampWP7
 
         public void OnFailure()
         {
-            MessageBox.Show("There was a problem contacting the server. Please try again later.");
+            MessageBox.Show("There was a problem contacting the server. Showing cached data.");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
