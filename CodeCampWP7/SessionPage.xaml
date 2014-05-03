@@ -70,7 +70,8 @@
                 </ListBox>
                 <TextBlock Name="Description" Text="{Binding Description}" Margin="25,10,0,0" TextWrapping="Wrap"/>
                 <StackPanel Orientation="Horizontal" Tap="AddReminder">
-                <Image Source="/Assets/feature.calendar.png" Margin="7,10,0,0"/>
+                    <Image Source="/Assets/feature.calendar.dark.png" Visibility="{StaticResource PhoneDarkThemeVisibility}" Margin="7,10,0,0"/>
+                    <Image Source="/Assets/feature.calendar.light.png" Visibility="{StaticResource PhoneLightThemeVisibility}" Margin="7,10,0,0"/>
                     <TextBlock Text="Add reminder" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,5"/>
                 </StackPanel>
             </StackPanel>

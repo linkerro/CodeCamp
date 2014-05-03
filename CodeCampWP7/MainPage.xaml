@@ -81,11 +81,13 @@
                             <maps:Pushpin Location="{Binding EventModel.Location, Converter={StaticResource LocationToGeoCoordinateConverter}}"/>
                         </maps:Map>
                         <StackPanel Orientation="Horizontal" Tap="Walking_Tap">
-                            <Image Source="/Assets/calendar.late.png"/>
+                            <Image Source="/Assets/calendar.late.dark.png" Visibility="{StaticResource PhoneDarkThemeVisibility}"/>
+                            <Image Source="/Assets/calendar.late.light.png" Visibility="{StaticResource PhoneLightThemeVisibility}"/>
                             <TextBlock Text="walking directions" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,5"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tap="Driving_Tap">
-                            <Image Source="/Assets/car.png"/>
+                            <Image Source="/Assets/car.dark.png" Visibility="{StaticResource PhoneDarkThemeVisibility}"/>
+                            <Image Source="/Assets/car.light.png" Visibility="{StaticResource PhoneLightThemeVisibility}"/>
                             <TextBlock Text="driving directions" Style="{StaticResource PhoneTextExtraLargeStyle}" TextWrapping="Wrap" Margin="10,5"/>
                         </StackPanel>
                     </StackPanel>
