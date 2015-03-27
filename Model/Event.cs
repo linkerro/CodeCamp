@@ -51,6 +51,7 @@ namespace Model
                                   group x by x.Start into g
                                   orderby g.Key
                                   select new TimeSlot { Start = g.Key, Sessions = g.ToList() }).ToArray();
+            
             return newEvent;
         }
     }
